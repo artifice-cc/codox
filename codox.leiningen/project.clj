@@ -1,4 +1,4 @@
-(defproject cc.artifice.codox/codox.leiningen "0.7.0-SNAPSHOT"
+(defproject cc.artifice/codox.leiningen "0.7.0-SNAPSHOT"
   :description "Codox Leiningen plugin"
   :url "https://github.com/artifice-cc/codox"
   :license {:name "Eclipse Public License"

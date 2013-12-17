@@ -1,4 +1,4 @@
-(defproject cc.artifice.codox/codox.core "0.7.0-SNAPSHOT"
+(defproject cc.artifice/codox.core "0.7.0-SNAPSHOT"
   :description "Generate documentation from Clojure source files"
   :url "https://github.com/artifice-cc/codox"
   :license {:name "Eclipse Public License"
