@@ -195,9 +195,18 @@ h4.macro {
    padding-left: 0;
 }
 
-.usage code {
+.usage code, .bindings code {
    display: block;
    color: #008;
+}
+
+.params table {
+    margin-top: 10px;
+    border: 1px solid #717171;
+}
+
+.params table td {
+    padding: 0.25em;
 }
 
 .doc {

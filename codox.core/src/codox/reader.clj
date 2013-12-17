@@ -26,7 +26,11 @@
 
 (defn- read-publics [namespace]
   (for [var (sorted-public-vars namespace)
-        :when (not (skip-public? var))]
+        :when (and (not (skip-public? var))
+                   (not (re-matches #"Positional factory function.*"
+                                    (or (:doc (meta var)) "")))
+                   (not (re-matches #"Factory function for class.*"
+                                    (or (:doc (meta var)) ""))))]
     (let [var-meta (meta (var-get var))
           params (:params var-meta)
           bindings (:bindings var-meta)
