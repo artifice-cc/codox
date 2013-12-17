@@ -3,7 +3,8 @@
   (:use [codox.utils :only (unindent)])
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
-            [clojure.tools.namespace :as ns])
+            [clojure.tools.namespace :as ns]
+            [geppetto.fn :as paramfn])
   (:import java.util.jar.JarFile))
 
 (defn- correct-indent [text]
@@ -26,10 +27,14 @@
 (defn- read-publics [namespace]
   (for [var (sorted-public-vars namespace)
         :when (not (skip-public? var))]
-    (-> (meta var)
-        (select-keys
-         [:name :file :line :arglists :doc :macro :added :deprecated])
-        (update-in [:doc] correct-indent))))
+    (let [var-meta (meta (var-get var))
+          params (:params var-meta)
+          bindings (:bindings var-meta)
+          orig-metadata (-> (meta var)
+                            (select-keys
+                             [:name :file :line :arglists :doc :macro :added :deprecated])
+                            (update-in [:doc] correct-indent))]
+      (assoc orig-metadata :params params :bindings bindings))))
 
 (defn- read-ns [namespace]
   (try

@@ -90,6 +90,15 @@
 (defn- namespace-title [namespace]
   (str (:name namespace) " documentation"))
 
+(defn- render-params [params]
+  [:table
+   [:thead
+    [:th "Parameter"]
+    [:th "Range"]]
+   [:tbody
+    (for [[k v] params]
+      [:tr [:td k] [:td (pr-str v)]])]])
+
 (defn- namespace-page [project namespace]
   (html5
    [:head
@@ -109,6 +118,12 @@
         [:div.usage
          (for [form (var-usage var)]
            [:code (h (pr-str form))])]
+        (when (:bindings var)
+          [:div.bindings
+           [:pre (pr-str (conj (:bindings var) 'params))]])
+        (when (:params var)
+          [:div.params
+           (render-params (:params var))])
         [:pre.doc (h (:doc var))]
         (when (:src-dir-uri project)
           [:div.src-link
