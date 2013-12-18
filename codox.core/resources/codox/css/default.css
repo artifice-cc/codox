@@ -148,7 +148,7 @@ h2 {
    font-weight: bold;
 }
 
-.public h3, h4.macro {
+.public h3, h4.macro, h4.params {
     margin: 0;
     float: left;
 }
@@ -162,6 +162,15 @@ h4.macro {
     font-size: 13px;
     font-weight: bold;
     color: #717171;
+    margin-top: 3px;
+    margin-left: 10px;
+}
+
+h4.params {
+    font-variant: small-caps;
+    font-size: 13px;
+    font-weight: bold;
+    color: #492525;
     margin-top: 3px;
     margin-left: 10px;
 }
@@ -215,4 +224,12 @@ h4.macro {
 
 .src-link a {
     font-size: 9pt;
+}
+
+.gossip img {
+    max-width: 100%;
+}
+
+.marginalia {
+    font-weight: bold;
 }

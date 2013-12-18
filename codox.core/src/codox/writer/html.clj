@@ -3,7 +3,8 @@
   (:use [hiccup core page element])
   (:import java.net.URLEncoder)
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clojure.pprint :as pprint]))
 
 (defn- ns-filename [namespace]
   (str (:name namespace) ".html"))
@@ -97,7 +98,7 @@
     [:th "Range"]]
    [:tbody
     (for [[k v] (sort-by first params)]
-      [:tr [:td [:code k]] [:td [:code (pr-str v)]]])]])
+      [:tr [:td [:code k]] [:td [:code (with-out-str (pprint/pprint v))]]])]])
 
 (defn- namespace-page [project namespace]
   (html5
@@ -111,9 +112,18 @@
     [:div#content.namespace-docs
      [:h2 (h (namespace-title namespace))]
      [:pre.doc (h (:doc namespace))]
+     (when (:gossip-dir project)
+       [:div.gossip
+        [:img.gossip {:src (format "%s/%s.png" (:gossip-dir project)
+                                   (str/replace (:name namespace) #"\." "_"))}]])
+     (when (:marginalia-dir project)
+       [:div.marginalia
+        (link-to (format "%s/%s.html" (:marginalia-dir project) (:name namespace))
+                 "Source code and inline documentation")])
      (for [var (:publics namespace)]
        [:div.public {:id (h (var-id var))}
         [:h3 (h (:name var))]
+        (if (:params var) [:h4.params "parameterized"])
         (if (:macro var) [:h4.macro "macro"])
         [:div.usage
          (for [form (var-usage var)]
