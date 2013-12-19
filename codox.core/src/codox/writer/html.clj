@@ -4,7 +4,8 @@
   (:import java.net.URLEncoder)
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
-            [clojure.pprint :as pprint]))
+            [clojure.pprint :as pprint]
+            [geppetto.fnviz :as fnviz]))
 
 (defn- ns-filename [namespace]
   (str (:name namespace) ".html"))
@@ -113,9 +114,11 @@
      [:h2 (h (namespace-title namespace))]
      [:pre.doc (h (:doc namespace))]
      (when (:gossip-dir project)
-       [:div.gossip
-        [:img.gossip {:src (format "%s/%s.png" (:gossip-dir project)
-                                   (str/replace (:name namespace) #"\." "_"))}]])
+       (let [pngfile (format "%s/%s.png" (:gossip-dir project)
+                             (str/replace (:name namespace) #"\." "_"))]
+         [:div.gossip
+          [:a {:href pngfile}
+           [:img.gossip {:src pngfile}]]]))
      (when (:marginalia-dir project)
        [:div.marginalia
         (link-to (format "%s/%s.html" (:marginalia-dir project) (:name namespace))
@@ -131,6 +134,14 @@
         (when (:bindings var)
           [:div.bindings
            [:code (h (pr-str (list* (:name var) (conj (:bindings var) 'params))))]])
+        (when (and (:fnviz-dir project) (map? (:val var)))
+          (when-let [pngfile (fnviz/graphviz-graph
+                              (format "%s/%s" (:output-dir project) (:fnviz-dir project))
+                              (var-id var) (:val var))]
+            (let [url-pngfile (URLEncoder/encode pngfile)]
+              [:div.fnviz
+               [:a {:href (format "%s/%s" (:fnviz-dir project) url-pngfile)}
+                [:img.fnviz {:src (format "%s/%s" (:fnviz-dir project) url-pngfile)}]]])))
         (when (:params var)
           [:div.params
            (render-params (:params var))])

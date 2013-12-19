@@ -226,7 +226,7 @@ h4.params {
     font-size: 9pt;
 }
 
-.gossip img {
+.gossip img, .fnviz img {
     max-width: 100%;
 }
 

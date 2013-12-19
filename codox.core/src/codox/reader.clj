@@ -38,7 +38,7 @@
                             (select-keys
                              [:name :file :line :arglists :doc :macro :added :deprecated])
                             (update-in [:doc] correct-indent))]
-      (assoc orig-metadata :params params :bindings bindings))))
+      (assoc orig-metadata :params params :bindings bindings :val (var-get var)))))
 
 (defn- read-ns [namespace]
   (try
