@@ -134,6 +134,7 @@
         (when (:bindings var)
           [:div.bindings
            [:code (h (pr-str (list* (:name var) (conj (:bindings var) 'params))))]])
+        [:pre.doc (h (:doc var))]
         (when (and (:fnviz-dir project) (map? (:val var)))
           (when-let [pngfile (fnviz/graphviz-graph
                               (format "%s/%s" (:output-dir project) (:fnviz-dir project))
@@ -145,7 +146,6 @@
         (when (:params var)
           [:div.params
            (render-params (:params var))])
-        [:pre.doc (h (:doc var))]
         (when (:src-dir-uri project)
           [:div.src-link
            [:a {:href (var-source-uri (:src-dir-uri project) var
